@@ -26,7 +26,6 @@ CFLAGS=		$(OPT) -I. -I$(BSD) \
 			-DUSRSBINDIR=\"$(USRSBINDIR)\" \
 			-DLOGDIR=\"$(LOGDIR)\" \
 			-DVARPATH=\"$(VARPATH)\"
-CFLAGS += -O2
 
 OBJS = login.o
 
