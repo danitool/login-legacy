@@ -83,8 +83,7 @@ int     krad=0;
 #include <sys/sysmacros.h>
 #include <netdb.h>
 
-
-#include <utmp.h>
+#include <paths.h>
 
 #ifdef SHADOW_PWD
 #include <shadow.h>
@@ -93,6 +92,7 @@ int     krad=0;
 #define	_PATH_DEFPATH_ROOT	"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 #define _PATH_USERTTY           "/etc/usertty"
 #define SECURETTY       	"/etc/securetty"
+#define UT_NAMESIZE	32
 
 #define P_(s) ()
 void opentty P_((const char *tty));
@@ -341,45 +341,6 @@ main(argc, argv)
 	    setreuid(ruid, 0);
 	    setregid(-1, egid);
 	}
-
-	/* for linux, write entries in utmp and wtmp */
-	{
-		struct utmp ut;
-		char *ttyabbrev;
-		int wtmp;
-		
-		memset((char *)&ut, 0, sizeof(ut));
-		ut.ut_type = USER_PROCESS;
-		ut.ut_pid = getpid();
-		strncpy(ut.ut_line, ttyn + sizeof("/dev/")-1, sizeof(ut.ut_line));
-		ttyabbrev = ttyn + sizeof("/dev/tty") - 1;
-		strncpy(ut.ut_id, ttyabbrev, sizeof(ut.ut_id));
-		(void)time(&ut.ut_time);
-		strncpy(ut.ut_user, username, sizeof(ut.ut_user));
-		
-		/* fill in host and ip-addr fields when we get networking */
-		if (hostname) {
-		    struct hostent *he;
-
-		    strncpy(ut.ut_host, hostname, sizeof(ut.ut_host));
-		    if ((he = gethostbyname(hostname)))
-		      memcpy(&ut.ut_addr, he->h_addr_list[0],
-			     sizeof(ut.ut_addr));
-		}
-
-		utmpname(_PATH_UTMP);
-		setutent();
-		pututline(&ut);
-		endutent();
-		
-		if((wtmp = open(_PATH_WTMP, O_APPEND|O_WRONLY)) >= 0) {
-		        flock(wtmp, LOCK_EX);
-		        write(wtmp, (char *)&ut, sizeof(ut));
-		        flock(wtmp, LOCK_UN);
-			close(wtmp);
-		}
-	}
-        /* fix_utmp_type_and_user(username, ttyn, LOGIN_PROCESS); */
 
 	(void)chown(ttyn, pwd->pw_uid,
 	    (gr = getgrnam(TTYGRPNAME)) ? gr->gr_gid : pwd->pw_gid);
