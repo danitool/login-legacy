@@ -90,7 +90,9 @@ int     krad=0;
 #include <shadow.h>
 #endif
 
-#include "pathnames.h"
+#define	_PATH_DEFPATH_ROOT	"/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+#define _PATH_USERTTY           "/etc/usertty"
+#define SECURETTY       	"/etc/securetty"
 
 #define P_(s) ()
 void opentty P_((const char *tty));
@@ -340,7 +342,6 @@ main(argc, argv)
 	    setregid(-1, egid);
 	}
 
-
 	/* for linux, write entries in utmp and wtmp */
 	{
 		struct utmp ut;
@@ -379,7 +380,6 @@ main(argc, argv)
 		}
 	}
         /* fix_utmp_type_and_user(username, ttyn, LOGIN_PROCESS); */
-
 
 	(void)chown(ttyn, pwd->pw_uid,
 	    (gr = getgrnam(TTYGRPNAME)) ? gr->gr_gid : pwd->pw_gid);

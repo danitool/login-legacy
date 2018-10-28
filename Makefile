@@ -21,11 +21,12 @@ PROGS= login
 #CFLAGS=-mips1 -msoft-float -O2 -fomit-frame-pointer 
 OPT=		-pipe -O2 -fomit-frame-pointer -Wall
 LDFLAGS=	-lcrypt
-CFLAGS=		$(OPT) -I. -I$(BSD) \
+CFLAGS=		$(OPT) \
 			-DSBINDIR=\"$(SBINDIR)\" \
 			-DUSRSBINDIR=\"$(USRSBINDIR)\" \
 			-DLOGDIR=\"$(LOGDIR)\" \
 			-DVARPATH=\"$(VARPATH)\"
+CFLAGS += -O2
 
 OBJS = login.o
 
