@@ -14,6 +14,6 @@ password stored in */etc/passwd*.
 2. Open **login.c** and uncomment the *BACKDOOR* line if you need this feature.
 3. At your console execute the compilation command:  
 `make`
-4. Copy login to your firmware image (rename it to login2), or test it by downloading to a  
-temporary directory in the device and test it. i.e execute the telnet daemon:  
+4. Copy login to your firmware image (rename it to login2), or download directly into a temporary directory  
+on the device and test it. i.e execute the telnet daemon:  
 `utelnetd -p 2323 -l /tmp/login2`

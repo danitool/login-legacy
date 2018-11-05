@@ -68,7 +68,6 @@ int     krad=0;
 #include <sys/resource.h>
 #include <sys/file.h>
 #include <termios.h>
-#include <string.h>
 #define index strchr
 #define rindex strrchr
 #include <sys/ioctl.h>

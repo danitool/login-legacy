@@ -1,4 +1,4 @@
-
+# change CROSS_COMPILE line to your own path
 CROSS_COMPILE=/opt/toolchains/uclibc-crosstools-gcc-4.4.2-1/usr/bin/mips-linux-
 
 CC=      $(CROSS_COMPILE)gcc
@@ -14,25 +14,18 @@ USRSBINDIR=	$(DESTDIR)/usr/sbin
 VARPATH=	$(DESTDIR)/var
 LOGDIR=		$(DESTDIR)/var/log
 
-
-BSD=   bsd
 PROGS= login
 
-#CFLAGS=-mips1 -msoft-float -O2 -fomit-frame-pointer 
-OPT=		-pipe -O2 -fomit-frame-pointer -Wall
-LDFLAGS=	-lcrypt
-CFLAGS=		$(OPT) \
-			-DSBINDIR=\"$(SBINDIR)\" \
-			-DUSRSBINDIR=\"$(USRSBINDIR)\" \
-			-DLOGDIR=\"$(LOGDIR)\" \
-			-DVARPATH=\"$(VARPATH)\"
-CFLAGS += -O2
+LDFLAGS=	-lcrypt -L ../lib
+CFLAGS=		-pipe -O2 -fomit-frame-pointer -Wall \
+		-DSBINDIR=\"$(SBINDIR)\" \
+		-DUSRSBINDIR=\"$(USRSBINDIR)\" \
+		-DLOGDIR=\"$(LOGDIR)\" \
+		-DVARPATH=\"$(VARPATH)\"
 
 OBJS = login.o
 
 all: $(PROGS)
-
-LDFLAGS += -L ../lib
 
 .c.o:
 	$(CC) -c $(CFLAGS) $<
